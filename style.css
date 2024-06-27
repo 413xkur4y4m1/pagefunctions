@@ -1,12 +1,61 @@
 /* Definición de variables globales */
-:root {
-    --colors-primary: #3D2264;
-    --colors-darkPrimary: #3D2264;
-    --colors-fadedPrimary: #3D2264;
-    --colors-darkGrey: #333333; /* Ejemplo de color oscuro, asegúrate de definir el valor correcto */
-    --radii-1: 4px; /* Ejemplo de valor, asegúrate de que esté definido */
-    --fonts-default: Arial, sans-serif; /* Ejemplo de fuente, asegúrate de que esté definida */
-    --space-3: 16px; /* Ejemplo de valor, asegúrate de que esté definido */
+:root,
+:host,
+.t-iiWAej {
+    --colors-black: rgba(0, 0, 0, 0.9);
+    --colors-white: #fff;
+    --colors-lightGrey: #f4f4f4;
+    --colors-medGrey: #dfdfdf;
+    --colors-darkGrey: #737376;
+    --colors-blue: #3d82e2;
+    --colors-warn: #db1b42;
+    --colors-darkWarn: #cd0038;
+    --colors-primary: #3d82e2;
+    --colors-darkPrimary: #2977d5;
+    --colors-fadedPrimary: #3d82e273;
+    --colors-shadow1: #3d82e2;
+    --colors-shadow2: rgba(0, 0, 0, 0.02);
+    --colors-shadow3: rgba(0, 0, 0, 0.03);
+    --colors-shadow4: rgba(0, 0, 0, 0.04);
+    --colors-shadow6: rgba(0, 0, 0, 0.06);
+    --colors-shadow8: rgba(0, 0, 0, 0.08);
+    --colors-shadow12: rgba(0, 0, 0, 0.12);
+    --colors-shadow16: rgba(0, 0, 0, 0.16);
+    --colors-surfaceZ1Light: 0px 1px 3px 1px rgba(22, 26, 30, 0.01), 0px 4px 8px -6px rgba(22, 26, 30, 0.08), 0px 1px 5px -4px rgba(22, 26, 30, 0.08), 0px 0px 0px 1px rgba(22, 26, 30, 0.04), 0px 1px 0px 0px rgba(22, 26, 30, 0.02);
+    --shadows-shadow1: rgba(0, 0, 0, 0.01);
+    --shadows-shadow2: rgba(0, 0, 0, 0.02);
+    --shadows-shadow3: rgba(0, 0, 0, 0.03);
+    --shadows-shadow4: rgba(0, 0, 0, 0.04);
+    --shadows-shadow6: rgba(0, 0, 0, 0.06);
+    --shadows-shadow8: rgba(0, 0, 0, 0.08);
+    --shadows-shadow12: rgba(0, 0, 0, 0.12);
+    --shadows-shadow16: rgba(0, 0, 0, 0.16);
+    --shadows-surfaceZ1Light: 0px 1px 3px 1px rgba(22, 26, 30, 0.01), 0px 4px 8px -6px rgba(22, 26, 30, 0.08), 0px 1px 5px -4px rgba(22, 26, 30, 0.08), 0px 0px 0px 1px rgba(22, 26, 30, 0.04), 0px 1px 0px 0px rgba(22, 26, 30, 0.02);
+    --space-1: 100px;
+    --space-2: 6px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --sizes-xxs: 16px;
+    --sizes-xs: 24px;
+    --sizes-sm: 36px;
+    --sizes-md: 42px;
+    --sizes-lg: 56px;
+    --sizes-xl: 60px;
+    --sizes-xxl: 72px;
+    --fonts-default: 'Open Sans', sans-serif;
+    --fontSizes-1: 13px;
+    --fontSizes-2: 15px;
+    --fontSizes-3: 18px;
+    --fontWeights-1: 400;
+    --fontWeights-2: 600;
+    --lineHeights-1: 20px;
+    --lineHeights-2: 22px;
+    --lineHeights-3: 24px;
+    --radii-1: 8px;
+    --radii-2: 10px;
+    --radii-round: 50%;
 }
 
 /* Estilos para la clase t-eTswqK */
