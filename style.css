@@ -31,7 +31,7 @@
     --shadows-shadow12: rgba(0, 0, 0, 0.12);
     --shadows-shadow16: rgba(0, 0, 0, 0.16);
     --shadows-surfaceZ1Light: 0px 1px 3px 1px rgba(22, 26, 30, 0.01), 0px 4px 8px -6px rgba(22, 26, 30, 0.08), 0px 1px 5px -4px rgba(22, 26, 30, 0.08), 0px 0px 0px 1px rgba(22, 26, 30, 0.04), 0px 1px 0px 0px rgba(22, 26, 30, 0.02);
-    --space-1: 100px;
+    --space-1: 1px;
     --space-2: 6px;
     --space-3: 12px;
     --space-4: 16px;
