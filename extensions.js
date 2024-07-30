@@ -139,25 +139,41 @@ export const VideoExtension = {
   match: ({ trace }) =>
     trace.type === 'ext_video' || trace.payload.name === 'ext_video',
   render: ({ trace, element }) => {
-    const videoElement = document.createElement('video')
-    const { videoURL, autoplay, controls } = trace.payload
+    const { videoURL, autoplay, controls } = trace.payload;
 
-    videoElement.width = 240
-    videoElement.src = videoURL
+    let videoElement;
 
-    if (autoplay) {
-      videoElement.setAttribute('autoplay', '')
+    if (videoURL.includes('youtube.com') || videoURL.includes('youtu.be')) {
+      videoElement = document.createElement('iframe');
+      const videoID = videoURL.split('v=')[1]?.split('&')[0] || videoURL.split('/').pop();
+      videoElement.src = `https://www.youtube.com/embed/${videoID}?autoplay=${autoplay ? 1 : 0}&controls=${controls ? 1 : 0}`;
+    } else if (videoURL.includes('drive.google.com')) {
+      videoElement = document.createElement('iframe');
+      const videoID = videoURL.split('/d/')[1]?.split('/')[0];
+      videoElement.src = `https://drive.google.com/file/d/${videoID}/preview`;
+    } else {
+      videoElement = document.createElement('video');
+      videoElement.src = videoURL;
+      if (autoplay) {
+        videoElement.setAttribute('autoplay', '');
+      }
+      if (controls) {
+        videoElement.setAttribute('controls', '');
+      }
     }
-    if (controls) {
-      videoElement.setAttribute('controls', '')
-    }
+
+    videoElement.width = 240;
+    videoElement.height = 135;
+    videoElement.allowFullscreen = true;
 
     videoElement.addEventListener('ended', function () {
-      window.voiceflow.chat.interact({ type: 'complete' })
-    })
-    element.appendChild(videoElement)
+      window.voiceflow.chat.interact({ type: 'complete' });
+    });
+
+    element.appendChild(videoElement);
   },
-}
+};
+
 
 export const TimerExtension = {
   name: 'Timer',
