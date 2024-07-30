@@ -132,51 +132,55 @@ export const MapExtension = {
     element.appendChild(GoogleMap)
   },
 }
-
 export const VideoExtension = {
   name: 'Video',
   type: 'response',
   match: ({ trace }) =>
     trace.type === 'ext_video' || trace.payload.name === 'ext_video',
   render: ({ trace, element }) => {
+    const videoElement = document.createElement('video')
     const { videoURL, autoplay, controls } = trace.payload
 
-    if (videoURL.includes('youtube.com') || videoURL.includes('youtu.be')) {
-      // Para videos de YouTube
-      const iframe = document.createElement('iframe')
-      const videoId = getYouTubeVideoId(videoURL)
-      iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=${autoplay ? 1 : 0}&controls=${controls ? 1 : 0}`
-      iframe.width = 240
-      iframe.height = 135
-      iframe.allowFullscreen = true
-      element.appendChild(iframe)
-    } else if (videoURL.includes('drive.google.com')) {
-      // Para videos de Google Drive
-      const iframe = document.createElement('iframe')
-      const fileId = getDriveFileId(videoURL)
-      iframe.src = `https://drive.google.com/file/d/${fileId}/preview`
-      iframe.width = 240
-      iframe.height = 135
-      iframe.allowFullscreen = true
-      element.appendChild(iframe)
-    } else {
-      // Para otros servicios de video
-      const videoElement = document.createElement('video')
-      videoElement.width = 240
-      videoElement.src = videoURL
+    videoElement.width = 240
+    videoElement.src = videoURL
 
-      if (autoplay) {
-        videoElement.setAttribute('autoplay', '')
-      }
-      if (controls) {
-        videoElement.setAttribute('controls', '')
-      }
-
-      videoElement.addEventListener('ended', function () {
-        window.voiceflow.chat.interact({ type: 'complete' })
-      })
-      element.appendChild(videoElement)
+    if (autoplay) {
+      videoElement.setAttribute('autoplay', '')
     }
+    if (controls) {
+      videoElement.setAttribute('controls', '')
+    }
+
+    videoElement.addEventListener('ended', function () {
+      window.voiceflow.chat.interact({ type: 'complete' })
+    })
+    element.appendChild(videoElement)
+  },
+}
+
+export const TimerExtension = {
+  name: 'Timer',
+  type: 'response',
+  match: ({ trace }) =>
+    trace.type === 'ext_timer' || trace.payload.name === 'ext_timer',
+  render: ({ trace, element }) => {
+    const { duration } = trace.payload || 5
+    let timeLeft = duration
+
+    const timerContainer = document.createElement('div')
+    timerContainer.innerHTML = `<p>Time left: <span id="time">${timeLeft}</span></p>`
+
+    const countdown = setInterval(() => {
+      if (timeLeft <= 0) {
+        clearInterval(countdown)
+        window.voiceflow.chat.interact({ type: 'complete' })
+      } else {
+        timeLeft -= 1
+        timerContainer.querySelector('#time').textContent = timeLeft
+      }
+    }, 1000)
+
+    element.appendChild(timerContainer)
   },
 }
 
