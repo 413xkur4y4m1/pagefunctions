@@ -3,15 +3,10 @@
 :host,
 .t-iiWAej {
     --colors-black: rgba(0, 0, 0, 0.9);
-    --colors-white: #fff;
-    --colors-lightGrey: #f4f4f4;
-    --colors-medGrey: #dfdfdf;
-    --colors-darkGrey: #737376;
-    --colors-blue: #3d82e2;
-    --colors-warn: #db1b42;
-    --colors-darkWarn: #cd0038;
-    --colors-primary: #3d82e2;
-    --colors-darkPrimary: #2977d5;
+    --colors-darkGrey: #5a5a5d; /* Oscurecido para mejor contraste */
+    --colors-blue: #2b6bc7; /* Oscurecido para mejor contraste */
+    --colors-primary: #2b6bc7; /* Oscurecido para mejor contraste */
+    --colors-darkPrimary: #1e5096;
     --colors-fadedPrimary: #3d82e273;
     --colors-shadow1: #3d82e2;
     --colors-shadow2: rgba(0, 0, 0, 0.02);
