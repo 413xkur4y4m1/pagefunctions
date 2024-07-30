@@ -147,10 +147,38 @@ export const VideoExtension = {
       videoElement = document.createElement('iframe');
       const videoID = videoURL.split('v=')[1]?.split('&')[0] || videoURL.split('/').pop();
       videoElement.src = `https://www.youtube.com/embed/${videoID}?autoplay=${autoplay ? 1 : 0}&controls=${controls ? 1 : 0}`;
+
+      // YouTube API script
+      const script = document.createElement('script');
+      script.src = "https://www.youtube.com/iframe_api";
+      document.head.appendChild(script);
+
+      window.onYouTubeIframeAPIReady = () => {
+        const player = new YT.Player(videoElement, {
+          events: {
+            'onStateChange': (event) => {
+              if (event.data === YT.PlayerState.ENDED) {
+                window.voiceflow.chat.interact({ type: 'complete' });
+              }
+            }
+          }
+        });
+      };
     } else if (videoURL.includes('drive.google.com')) {
       videoElement = document.createElement('iframe');
       const videoID = videoURL.split('/d/')[1]?.split('/')[0];
       videoElement.src = `https://drive.google.com/file/d/${videoID}/preview`;
+
+      videoElement.addEventListener('load', () => {
+        const iframeDoc = videoElement.contentDocument || videoElement.contentWindow.document;
+        const videoTag = iframeDoc.querySelector('video');
+
+        if (videoTag) {
+          videoTag.addEventListener('ended', () => {
+            window.voiceflow.chat.interact({ type: 'complete' });
+          });
+        }
+      });
     } else {
       videoElement = document.createElement('video');
       videoElement.src = videoURL;
@@ -160,19 +188,19 @@ export const VideoExtension = {
       if (controls) {
         videoElement.setAttribute('controls', '');
       }
+      videoElement.addEventListener('ended', function () {
+        window.voiceflow.chat.interact({ type: 'complete' });
+      });
     }
 
     videoElement.width = 240;
     videoElement.height = 135;
     videoElement.allowFullscreen = true;
 
-    videoElement.addEventListener('ended', function () {
-      window.voiceflow.chat.interact({ type: 'complete' });
-    });
-
     element.appendChild(videoElement);
   },
 };
+
 
 
 export const TimerExtension = {
