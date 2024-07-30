@@ -139,24 +139,62 @@ export const VideoExtension = {
   match: ({ trace }) =>
     trace.type === 'ext_video' || trace.payload.name === 'ext_video',
   render: ({ trace, element }) => {
-    const videoElement = document.createElement('video')
     const { videoURL, autoplay, controls } = trace.payload
 
-    videoElement.width = 240
-    videoElement.src = videoURL
+    if (videoURL.includes('youtube.com') || videoURL.includes('youtu.be')) {
+      // Para videos de YouTube
+      const iframe = document.createElement('iframe')
+      const videoId = getYouTubeVideoId(videoURL)
+      iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=${autoplay ? 1 : 0}&controls=${controls ? 1 : 0}`
+      iframe.width = 240
+      iframe.height = 135
+      iframe.allowFullscreen = true
+      element.appendChild(iframe)
+    } else if (videoURL.includes('drive.google.com')) {
+      // Para videos de Google Drive
+      const iframe = document.createElement('iframe')
+      const fileId = getDriveFileId(videoURL)
+      iframe.src = `https://drive.google.com/file/d/${fileId}/preview`
+      iframe.width = 240
+      iframe.height = 135
+      iframe.allowFullscreen = true
+      element.appendChild(iframe)
+    } else {
+      // Para otros servicios de video
+      const videoElement = document.createElement('video')
+      videoElement.width = 240
+      videoElement.src = videoURL
 
-    if (autoplay) {
-      videoElement.setAttribute('autoplay', '')
-    }
-    if (controls) {
-      videoElement.setAttribute('controls', '')
-    }
+      if (autoplay) {
+        videoElement.setAttribute('autoplay', '')
+      }
+      if (controls) {
+        videoElement.setAttribute('controls', '')
+      }
 
-    videoElement.addEventListener('ended', function () {
-      window.voiceflow.chat.interact({ type: 'complete' })
-    })
-    element.appendChild(videoElement)
+      videoElement.addEventListener('ended', function () {
+        window.voiceflow.chat.interact({ type: 'complete' })
+      })
+      element.appendChild(videoElement)
+    }
   },
+}
+
+// Función auxiliar para obtener el ID de video de YouTube
+function getYouTubeVideoId(url) {
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/
+  const match = url.match(regExp)
+  return (match && match[2].length === 11) ? match[2] : null
+}
+
+// Función auxiliar para obtener el ID de archivo de Google Drive
+function getDriveFileId(url) {
+  const regExp = /\/file\/d\/([^/]+)/
+  const match = url.match(regExp)
+  return match ? match[1] : null
+}
+
+export const TimerExtension = {
 }
 
 export const TimerExtension = {
