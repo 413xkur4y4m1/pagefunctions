@@ -158,6 +158,7 @@ export const VideoExtension = {
           events: {
             'onStateChange': (event) => {
               if (event.data === YT.PlayerState.ENDED) {
+                console.log('YouTube video ended');
                 window.voiceflow.chat.interact({ type: 'complete' });
               }
             }
@@ -175,8 +176,11 @@ export const VideoExtension = {
 
         if (videoTag) {
           videoTag.addEventListener('ended', () => {
+            console.log('Google Drive video ended');
             window.voiceflow.chat.interact({ type: 'complete' });
           });
+        } else {
+          console.log('Google Drive video tag not found');
         }
       });
     } else {
@@ -189,6 +193,7 @@ export const VideoExtension = {
         videoElement.setAttribute('controls', '');
       }
       videoElement.addEventListener('ended', function () {
+        console.log('HTML5 video ended');
         window.voiceflow.chat.interact({ type: 'complete' });
       });
     }
@@ -199,9 +204,7 @@ export const VideoExtension = {
 
     element.appendChild(videoElement);
   },
-};
-
-
+}
 
 export const TimerExtension = {
   name: 'Timer',
