@@ -139,26 +139,23 @@ export const VideoExtension = {
   match: ({ trace }) =>
     trace.type === 'ext_video' || trace.payload.name === 'ext_video',
   render: ({ trace, element }) => {
-    const { videoURL, autoplay, controls } = trace.payload;
-    const videoElement = document.createElement('iframe');
+    const videoElement = document.createElement('video')
+    const { videoURL, autoplay, controls } = trace.payload
 
-    videoElement.width = 560; // Tamaño estándar de iframe para videos de YouTube
-    videoElement.height = 315; // Tamaño estándar de iframe para videos de YouTube
-    videoElement.src = videoURL;
+    videoElement.width = 240
+    videoElement.src = videoURL
 
     if (autoplay) {
-      videoElement.src += (videoURL.includes('?') ? '&' : '?') + 'autoplay=1';
+      videoElement.setAttribute('autoplay', '')
+    }
+    if (controls) {
+      videoElement.setAttribute('controls', '')
     }
 
-    videoElement.setAttribute('frameborder', '0');
-    videoElement.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
-    videoElement.setAttribute('allowfullscreen', '');
-
-    videoElement.addEventListener('load', function () {
-      // Puedes agregar lógica adicional si es necesario
-    });
-
-    element.appendChild(videoElement);
+    videoElement.addEventListener('ended', function () {
+      window.voiceflow.chat.interact({ type: 'complete' })
+    })
+    element.appendChild(videoElement)
   },
 }
 
