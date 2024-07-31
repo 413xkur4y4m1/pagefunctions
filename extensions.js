@@ -139,70 +139,75 @@ export const VideoExtension = {
   match: ({ trace }) =>
     trace.type === 'ext_video' || trace.payload.name === 'ext_video',
   render: ({ trace, element }) => {
-    const { videoURL, autoplay, controls } = trace.payload;
+    const { videoURL, autoplay, controls } = trace.payload
 
-    let videoElement;
+    let videoElement
 
     if (videoURL.includes('youtube.com') || videoURL.includes('youtu.be')) {
-      videoElement = document.createElement('iframe');
-      const videoID = videoURL.split('v=')[1]?.split('&')[0] || videoURL.split('/').pop();
-      videoElement.src = `https://www.youtube.com/embed/${videoID}?autoplay=${autoplay ? 1 : 0}&controls=${controls ? 1 : 0}`;
+      videoElement = document.createElement('iframe')
+      const videoID = videoURL.split('v=')[1]?.split('&')[0] || videoURL.split('/').pop()
+      videoElement.src = `https://www.youtube.com/embed/${videoID}?autoplay=${autoplay ? 1 : 0}&controls=${controls ? 1 : 0}`
 
       // YouTube API script
-      const script = document.createElement('script');
-      script.src = "https://www.youtube.com/iframe_api";
-      document.head.appendChild(script);
+      const script = document.createElement('script')
+      script.src = "https://www.youtube.com/iframe_api"
+      document.head.appendChild(script)
 
-      window.onYouTubeIframeAPIReady = () => {
-        const player = new YT.Player(videoElement, {
-          events: {
-            'onStateChange': (event) => {
-              if (event.data === YT.PlayerState.ENDED) {
-                window.voiceflow.chat.interact({ type: 'complete' });
+      const checkYouTubeAPIReady = () => {
+        if (window.YT && window.YT.Player) {
+          const player = new YT.Player(videoElement, {
+            events: {
+              'onStateChange': (event) => {
+                if (event.data === YT.PlayerState.ENDED) {
+                  window.voiceflow.chat.interact({ type: 'complete' })
+                }
               }
             }
-          }
-        });
-      };
+          })
+        } else {
+          setTimeout(checkYouTubeAPIReady, 100)
+        }
+      }
+      checkYouTubeAPIReady()
     } else if (videoURL.includes('drive.google.com')) {
-      videoElement = document.createElement('iframe');
-      const videoID = videoURL.split('/d/')[1]?.split('/')[0];
-      videoElement.src = `https://drive.google.com/file/d/${videoID}/preview`;
+      videoElement = document.createElement('iframe')
+      const videoID = videoURL.split('/d/')[1]?.split('/')[0]
+      videoElement.src = `https://drive.google.com/file/d/${videoID}/preview`
 
       videoElement.addEventListener('load', () => {
-        const iframeDoc = videoElement.contentDocument || videoElement.contentWindow.document;
+        const iframeDoc = videoElement.contentDocument || videoElement.contentWindow.document
         const checkVideoTag = () => {
-          const videoTag = iframeDoc.querySelector('video');
+          const videoTag = iframeDoc.querySelector('video')
           if (videoTag) {
             videoTag.addEventListener('ended', () => {
-              window.voiceflow.chat.interact({ type: 'complete' });
-            });
+              window.voiceflow.chat.interact({ type: 'complete' })
+            })
           } else {
-            setTimeout(checkVideoTag, 500); // Check again after 500ms if not found
+            setTimeout(checkVideoTag, 500) // Check again after 500ms if not found
           }
-        };
-        checkVideoTag();
-      });
+        }
+        checkVideoTag()
+      })
     } else {
-      videoElement = document.createElement('video');
-      videoElement.src = videoURL;
+      videoElement = document.createElement('video')
+      videoElement.src = videoURL
       if (autoplay) {
-        videoElement.setAttribute('autoplay', '');
+        videoElement.setAttribute('autoplay', '')
       }
       if (controls) {
-        videoElement.setAttribute('controls', '');
+        videoElement.setAttribute('controls', '')
       }
       videoElement.addEventListener('ended', function () {
-        window.voiceflow.chat.interact({ type: 'complete' });
-      });
+        window.voiceflow.chat.interact({ type: 'complete' })
+      })
     }
 
-    videoElement.width = 240;
-    videoElement.height = 135;
-    videoElement.allowFullscreen = true;
+    videoElement.width = 240
+    videoElement.height = 135
+    videoElement.allowFullscreen = true
 
-    element.appendChild(videoElement);
-  },
+    element.appendChild(videoElement)
+  }
 }
 
 export const TimerExtension = {
